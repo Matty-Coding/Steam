@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+/* Custom theme */
+@theme {
+  --font-base: "Source Sans 3", sans-serif;
+}
+
+/* Layer base styles */
+@layer base {
+  body {
+    @apply font-base bg-black/90 text-white/80 min-h-dvh w-screen m-0 p-0 box-border;
+  }
+}
+
+/* Components default */
+@layer components {}
+
