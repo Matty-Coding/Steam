@@ -159,3 +159,9 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
 }
+
+AUTH_USER_MODEL = "users.CustomUser"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
