@@ -8,6 +8,7 @@ from .services import send_activation_email
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from .utils import validate_activation_token
+from django.middleware.csrf import get_token
 
 
 # Create your views here.
@@ -41,6 +42,8 @@ class LoginView(APIView):
             user = serializer.validated_data["user"]
 
             refresh = RefreshToken.for_user(user)
+
+            get_token(request)
 
             response = Response({
                 "message": "Login successful",
@@ -96,8 +99,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         response = super().post(request, *args, **kwargs)
 
         if response.status_code == 200 and "refresh" in response.data:
-            new_refresh_token = response.data.pop(
-                "refresh")  # Lo togliamo dal JSON
+            new_refresh_token = response.data.pop("refresh")
 
             response.set_cookie(
                 key="refresh_token",
