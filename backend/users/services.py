@@ -1,11 +1,9 @@
 from django.core.mail import EmailMessage
 from .utils import generate_activation_token
 from django.conf import settings
-from celery import shared_task
 
 
-@shared_task
-def send_activation_email(user) -> bool:
+def send_activation_email(user):
     token_data = generate_activation_token(user)
 
     uid = token_data.get("uid")
@@ -24,7 +22,9 @@ def send_activation_email(user) -> bool:
         from_email=settings.EMAIL_HOST_USER
     )
 
-    if email.send(fail_silently=False):
-        return True
+    try:
+        sent = email.send(fail_silently=False)
+        return sent == 1
 
-    return False
+    except:
+        return False

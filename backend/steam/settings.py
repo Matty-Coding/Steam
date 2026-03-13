@@ -132,36 +132,41 @@ STATIC_URL = "static/"
 BACKEND_URL = env("BACKEND_URL")
 FRONTEND_URL = env("FRONTEND_URL")
 
-CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL]  # Allowed path
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True  # allow send cookies
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "ROTATE_REFRESH_TOKENS": True,      # refresh token
+    "BLACKLIST_AFTER_ROTATION": True,   # blacklist old token
+    "AUTH_COOKIE": "refresh_token",     # cookie name
+    "AUTH_COOKIE_HTTP_ONLY": True,      # block js access
+    "AUTH_COOKIE_PATH": "/",            # Allowed path (all site)
+    "AUTH_COOKIE_SAMESITE": "Lax",      # CSRF Protection
+    "AUTH_COOKIE_SECURE": False,        # True in production (HTTPS)
 }
 
-# SESSION_COOKIE_SECURE = True      # https only (prod)
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = False      # True in production (HTTPS)
+SESSION_COOKIE_HTTPONLY = True     # block js access
+SESSION_COOKIE_SAMESITE = "Lax"    # CSRF Protection
 
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]
+CSRF_COOKIE_SECURE = False            # True in production (HTTPS)
+CSRF_COOKIE_SAMESITE = "Lax"          # CSRF Protection
+CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]  # Allowed path
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  # JWT Authentication
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",     # Authorization
     ),
 }
 
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "users.CustomUser"  # CustomUser
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Send email to console
 
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # Email host user

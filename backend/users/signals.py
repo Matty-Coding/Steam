@@ -19,6 +19,3 @@ def create_profile(sender, instance, created, **kwargs):
         user=instance,
         username=username
     )
-
-    if not instance.is_superuser:
-        send_activation_email(instance)
