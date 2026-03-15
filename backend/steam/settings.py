@@ -134,8 +134,10 @@ FRONTEND_URL = env("FRONTEND_URL")
 
 CORS_ALLOWED_ORIGINS = [FRONTEND_URL]  # Allowed path
 
+# CORS SETTINGS (cookie access)
 CORS_ALLOW_CREDENTIALS = True  # allow send cookies
 
+# JWT SETTINGS
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
@@ -148,14 +150,17 @@ SIMPLE_JWT = {
     "AUTH_COOKIE_SECURE": False,        # True in production (HTTPS)
 }
 
+# SESSION SETTINGS
 SESSION_COOKIE_SECURE = False      # True in production (HTTPS)
 SESSION_COOKIE_HTTPONLY = True     # block js access
 SESSION_COOKIE_SAMESITE = "Lax"    # CSRF Protection
 
+# CSRF SETTINGS
 CSRF_COOKIE_SECURE = False            # True in production (HTTPS)
 CSRF_COOKIE_SAMESITE = "Lax"          # CSRF Protection
 CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]  # Allowed path
 
+# REST FRAMEWORK SETTINGS (JWT AUTHENTICATION)
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",  # JWT Authentication
@@ -163,6 +168,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",     # Authorization
     ),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",     # Anonymous throttling
+        "rest_framework.throttling.UserRateThrottle"      # User throttling
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/day",          # Anonymous limiter
+        "user": "1000/hour",        # User limiter
+        "resend_email": "3/hour"    # Resend email limiter
+    }
 }
 
 AUTH_USER_MODEL = "users.CustomUser"  # CustomUser
@@ -170,3 +184,9 @@ AUTH_USER_MODEL = "users.CustomUser"  # CustomUser
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Send email to console
 
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # Email host user
+
+SALT_ACTIVATION_ACCOUNT = env("SALT_ACTIVATION_ACCOUNT")  # activate-token
+
+SALT_RESET_PASSWORD = env("SALT_RESET_PASSWORD")  # reset-token
+
+TOKEN_MAX_AGE = timedelta(hours=1)  # token max age

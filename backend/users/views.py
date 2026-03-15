@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from .utils import validate_activation_token
 from django.middleware.csrf import get_token
+from .throttles import EmailResendThrottle
 
 
 # Create your views here.
@@ -63,11 +64,16 @@ class LoginView(APIView):
 
 
 class ResendActivationView(APIView):
+    permission_classes = (AllowAny,)
+    throttle_classes = [EmailResendThrottle]
+
     def post(self, request):
         email = request.data.get("email")
         try:
             user = CustomUser.objects.get(email=email)
             if not user.is_active:
+                setattr(user, "token_value", user.token_value + 1)
+                user.save()
                 send_activation_email(user)
                 return Response({
                     "message": "Activation email resent"
@@ -114,7 +120,7 @@ class CookieTokenRefreshView(TokenRefreshView):
 
 
 class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)    # ???
 
     def post(self, request):
         try:
@@ -145,8 +151,8 @@ class LogoutView(APIView):
 class ActivateAccountView(APIView):
     permission_classes = (AllowAny,)
 
-    def get(self, request, uid, token):
-        user = validate_activation_token(uid, token)
+    def get(self, request, uidb64, token):
+        user = validate_activation_token(uidb64, token)
 
         if user:
             if user.is_active:

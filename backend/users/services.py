@@ -11,7 +11,7 @@ def send_activation_email(user):
 
     subject = "Activate your account"
 
-    activation_link = f"http://{settings.FRONTEND_URL}/activate/{uid}/{token}"
+    activation_link = f"{settings.FRONTEND_URL}/auth/activate/{uid}/{token}"
 
     message = f"Please click the link to activate your account: {activation_link}"
 

@@ -2,10 +2,12 @@ from django.contrib import admin
 from .models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 
+
 # Register your models here.
 
 
 class CustomUserAdmin(UserAdmin):
+
     model = CustomUser
 
     ordering = ("email",)
@@ -14,7 +16,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (
-            None,
+            "Credentials",
             {
                 "classes": ("wide",),
                 "fields": ("email", "password"),
@@ -33,20 +35,8 @@ class CustomUserAdmin(UserAdmin):
     )
 
     add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": (
-                    "email",
-                    "password",
-                    "confirm_password",
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                ),
-            },
-        ),
+        ("Credentials", {"classes": ("wide",),
+         "fields": ("email", "password")}),
     )
 
 
