@@ -10,6 +10,11 @@ from rest_framework import status
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration (ModelSerializer)
+
+    Confirm password is required
+    """
 
     # adding custom field to serializer for password
     confirm_password = serializers.CharField(write_only=True)
@@ -30,18 +35,22 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     # override validate method
     def validate(self, attrs) -> dict[str, str]:
+
         # check matching password
         if attrs["password"] != attrs["confirm_password"]:
+
             # throw serializer error with custom message
             raise serializers.ValidationError({
                 "confirm_password": "Password do not match"
             })
 
         try:
-            # validate password
             user = CustomUser(email=attrs["email"])
+
+            # validate password
             validate_password(attrs["password"], user)
 
+        # catch validation error
         except ValidationError as e:
             raise serializers.ValidationError({
                 "password": list(e.messages)
@@ -52,6 +61,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     # override create method
     def create(self, validated_data):
+
         # remove confirm password (custom field)
         validated_data.pop("confirm_password")
 
@@ -74,11 +84,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 # login does not require to reflect model
 # just checking credentials
 class LoginSerializer(serializers.Serializer):
+    """
+    Serializer for user login (Serializer)
+
+    Only email and password are required
+    """
 
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
+
         # get email and password from request data
         email = attrs.get("email")
         password = attrs.get("password")
@@ -87,6 +103,7 @@ class LoginSerializer(serializers.Serializer):
         user = CustomUser.objects.filter(email=email).first()
 
         if not user or not user.check_password(password):
+
             # throw authentication error (DRF exception)
             raise AuthenticationFailed({
                 "message": "Invalid credentials"
