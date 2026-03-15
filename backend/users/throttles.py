@@ -1,10 +1,16 @@
 from rest_framework.throttling import AnonRateThrottle
 
 
-class EmailResendThrottle(AnonRateThrottle):
-    # setting email resend throttle
-    # to block spam
-    scope = "resend_email"
+class RateThrottling(AnonRateThrottle):
+    """
+    AnonRateThrottle with scope set to None
+
+    Used for resend email and login endpoints
+
+    Based on email address instead of ip address
+    """
+
+    scope = None
 
     def get_cache_key(self, request, view):
         # sensitive to email

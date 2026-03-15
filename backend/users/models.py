@@ -28,7 +28,6 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
 
         # set default values for superuser
-        extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
@@ -44,7 +43,7 @@ class CustomUser(AbstractUser):
     # username field is not required
     username = None
 
-    # first and last name removed
+    # optional fields removed
     first_name = None
     last_name = None
 

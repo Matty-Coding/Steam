@@ -9,4 +9,6 @@ urlpatterns = [
          views.ActivateAccountView.as_view(), name="activate"),
     path("resend-activation/", views.ResendActivationView.as_view(),
          name="resend-activation"),
+    path("refresh-token/", views.CookieTokenRefreshView.as_view(),
+         name="refresh-token"),
 ]

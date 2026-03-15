@@ -175,7 +175,8 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "100/day",          # Anonymous limiter
         "user": "1000/hour",        # User limiter
-        "resend_email": "3/hour"    # Resend email limiter
+        "resend_email": "3/hour",   # Resend email limiter
+        "login": "5/minute"         # Login limiter
     }
 }
 
