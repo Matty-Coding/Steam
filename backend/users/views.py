@@ -84,12 +84,13 @@ class LoginView(APIView):
             response = Response({
                 "message": "Login successful",
                 # return access token in response
-                "access_token": str(refresh.access_token)
+                # accessToken to be used in frontend
+                "accessToken": str(refresh.access_token)
             }, status=status.HTTP_200_OK)
 
             # set refresh token in cookie
             response.set_cookie(
-                key="refresh_token",
+                key="refreshToken",  # key to be used in frontend
                 value=str(refresh),
                 httponly=True,
                 secure=False,
@@ -170,7 +171,7 @@ class CookieTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
 
         # get refresh token from cookies
-        refresh_token = request.COOKIES.get("refresh_token")
+        refresh_token = request.COOKIES.get("refreshToken")
 
         # check if refresh token exists
         if refresh_token:
@@ -195,19 +196,19 @@ class CookieTokenRefreshView(TokenRefreshView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
             # delete refresh token from cookies
-            response.delete_cookie("refresh_token")
+            response.delete_cookie("refreshToken")
             return response
 
         if response.status_code == 200:
             # check if refresh token exists
-            if "refresh" in response.data:
+            if "refreshToken" in response.data:
 
                 # get new refresh token while removing it
-                new_refresh_token = response.data.pop("refresh")
+                new_refresh_token = response.data.pop("refreshToken")
 
                 # set new refresh token in cookies
                 response.set_cookie(
-                    key="refresh_token",
+                    key="refreshToken",
                     value=new_refresh_token,
                     httponly=True,
                     secure=False,
@@ -219,7 +220,7 @@ class CookieTokenRefreshView(TokenRefreshView):
             elif response.status_code >= 400:
 
                 # delete refresh token
-                response.delete_cookie("refresh_token")
+                response.delete_cookie("refreshToken")
 
         return response
 
@@ -236,7 +237,7 @@ class LogoutView(APIView):
     def post(self, request):
         try:
             # get refresh token from cookies
-            refresh_token = request.COOKIES.get("refresh_token")
+            refresh_token = request.COOKIES.get("refreshToken")
 
             # check if refresh token exists
             if refresh_token:
@@ -257,7 +258,7 @@ class LogoutView(APIView):
             }, status=status.HTTP_200_OK)
 
         # delete refresh token and csrf token
-        response.delete_cookie("refresh_token")
+        response.delete_cookie("refreshToken")
         response.delete_cookie("csrftoken")
 
         return response

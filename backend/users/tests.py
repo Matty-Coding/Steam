@@ -45,13 +45,13 @@ class LoginTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # assert response contains access token in data
-        self.assertIn("access_token", response.data)
+        self.assertIn("accessToken", response.data)
 
         # assert response contains refresh token in cookies
-        self.assertIn("refresh_token", response.cookies)
+        self.assertIn("refreshToken", response.cookies)
 
         # recover refresh token from response cookies
-        refresh_cookie = response.cookies["refresh_token"]
+        refresh_cookie = response.cookies["refreshToken"]
 
         # assert refresh token is httponly
         self.assertTrue(refresh_cookie["httponly"])
@@ -70,7 +70,7 @@ class LoginTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # assert response does not contain access token in data
-        self.assertNotIn("access_token", response.data)
+        self.assertNotIn("accessToken", response.data)
 
         # assert response does not contain refresh token in cookies
-        self.assertNotIn("refresh_token", response.cookies)
+        self.assertNotIn("refreshToken", response.cookies)
