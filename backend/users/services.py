@@ -6,11 +6,12 @@ from django.conf import settings
 def send_activation_email(user):
     token_data = generate_activation_token(user)
 
+    uid = token_data.get("uid")
     token = token_data.get("token")
 
     subject = "Activate your account"
 
-    activation_link = f"{settings.FRONTEND_URL}/auth/activate/{token}"
+    activation_link = f"{settings.FRONTEND_URL}/auth/activate/{uid}/{token}"
 
     message = f"Please click the link to activate your account: {activation_link}"
 
@@ -18,7 +19,7 @@ def send_activation_email(user):
         subject,
         message,
         to=[user.email],
-        from_email=settings.EMAIL_HOST_USER
+        from_email=settings.EMAIL_HOST
     )
 
     try:

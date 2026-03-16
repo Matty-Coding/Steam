@@ -184,7 +184,7 @@ AUTH_USER_MODEL = "users.CustomUser"  # CustomUser
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Send email to console
 
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # Email host user
+EMAIL_HOST = env("EMAIL_HOST")  # Email host
 
 SALT_ACTIVATION_ACCOUNT = env("SALT_ACTIVATION_ACCOUNT")  # activate-token
 
