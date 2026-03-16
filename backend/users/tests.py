@@ -32,7 +32,7 @@ class RegisterTest(TestCase):
         }
 
         # simulate throttling
-        for i in range(4):
+        for i in range(3):
             response = self.client.post(
                 self.resend_activation_url, {}, content_type="application/json"
             )
@@ -105,7 +105,7 @@ class LoginTest(TestCase):
 
     # set up user (called before each test)
     def setUp(self):
-
+        self.refresh_token_url = reverse("refresh-token")
         self.email = "text@example.com"
         self.password = "Django.12345"
         self.user = User.objects.create_user(
@@ -167,25 +167,3 @@ class LoginTest(TestCase):
 
         # assert response does not contain refresh token in cookies
         self.assertNotIn("refreshToken", response.cookies)
-
-
-class ThrottlingTest(TestCase):
-
-    # set up user (called before each test)
-    def setUp(self):
-
-        self.email = "text@example.com"
-        self.password = "Django.12345"
-        self.user = User.objects.create_user(
-            email=self.email,
-            password=self.password
-        )
-
-        # settings is_active to True
-        setattr(self.user, "is_active", True)
-
-        # save changes
-        self.user.save()
-
-        # set login url path
-        self.login_url = reverse("login")
