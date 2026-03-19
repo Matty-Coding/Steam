@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from .utils import validate_activation_token
 from django.middleware.csrf import get_token
-from .throttles import RateThrottling
+from .throttles import LoginThrottling, RateEmailSendThrottling
 
 
 class RegisterView(APIView):
@@ -59,8 +59,7 @@ class LoginView(APIView):
     permission_classes = (AllowAny,)
 
     # assign throttling to rate limit login api 5/min
-    throttle_classes = [RateThrottling]
-    RateThrottling.scope = "login"
+    throttle_classes = [LoginThrottling]
 
     # post method for user login
     def post(self, request):
@@ -110,8 +109,7 @@ class ResendActivationView(APIView):
     permission_classes = (AllowAny,)
 
     # assign throttling to rate limit login api 3/h
-    throttle_classes = [RateThrottling]
-    RateThrottling.scope = "resend_email"
+    throttle_classes = [RateEmailSendThrottling]
 
     # post method for resending activation email
     def post(self, request):
@@ -200,11 +198,18 @@ class CookieTokenRefreshView(TokenRefreshView):
             return response
 
         if response.status_code == 200:
+
+            # sostitute key access by default with accessToken
+            if "access" in response.data:
+                response.data["accessToken"] = response.data.pop("access")
+
             # check if refresh token exists
-            if "refreshToken" in response.data:
+            # refresh and not refreshToken
+            # cause TokenRefreshView returns refresh by default
+            if "refresh" in response.data:
 
                 # get new refresh token while removing it
-                new_refresh_token = response.data.pop("refreshToken")
+                new_refresh_token = response.data.pop("refresh")
 
                 # set new refresh token in cookies
                 response.set_cookie(
