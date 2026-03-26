@@ -5,7 +5,7 @@ from rest_framework import status
 from django.core import mail
 from django.core.cache import cache
 from re import search
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 
 # recover user model
 User = get_user_model()

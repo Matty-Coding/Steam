@@ -159,6 +159,7 @@ SESSION_COOKIE_SAMESITE = "Lax"    # CSRF Protection
 CSRF_COOKIE_SECURE = False            # True in production (HTTPS)
 CSRF_COOKIE_SAMESITE = "Lax"          # CSRF Protection
 CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]  # Allowed path
+CSRF_COOKIE_NAME = "csrfToken"        # cookie name
 
 # REST FRAMEWORK SETTINGS (JWT AUTHENTICATION)
 REST_FRAMEWORK = {

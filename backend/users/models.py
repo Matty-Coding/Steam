@@ -30,6 +30,7 @@ class CustomUserManager(BaseUserManager):
         # set default values for superuser
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_staff", True)
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)

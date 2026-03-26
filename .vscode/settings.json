@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "steam",
+            "database": "${workspaceFolder:steam-project}/backend/steam-demo.sqlite3"
+        }
+    ]
+}

@@ -36,15 +36,14 @@ class RegisterView(APIView):
             send_activation_email(user)
 
             # register successful
-            return Response({
-                "message": "Registration successful. Please check your email to activate your account."
-            }, status=status.HTTP_201_CREATED)
+            return Response(
+                {
+                    "message": "Registration successful. Please check your email to activate your account."
+                },
+                status=status.HTTP_201_CREATED)
 
         # register failed
-        return Response({
-            "message": "Registration failed",
-            "errors": serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
@@ -81,7 +80,10 @@ class LoginView(APIView):
 
             # login successful
             response = Response({
-                "message": "Login successful",
+                "user": {
+                    "email": user.email,
+                    "username": user.profile.username,
+                },
                 # return access token in response
                 # accessToken to be used in frontend
                 "accessToken": str(refresh.access_token)
@@ -190,7 +192,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         # catch any exception
         except Exception:
             response = Response({
-                "detail": "Invalid refresh token"
+                "message": "Invalid refresh token"
             }, status=status.HTTP_401_UNAUTHORIZED)
 
             # delete refresh token from cookies

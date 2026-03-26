@@ -114,7 +114,8 @@ class LoginSerializer(serializers.Serializer):
         # manage it with resend activation link
         if not user.is_active:
             raise AuthenticationFailed({
-                "message": "Account not activated"
+                "message": "Account not activated",
+                "userEmail": user.email
             }, code=status.HTTP_401_UNAUTHORIZED)
 
         # add user object to validated data

@@ -1,21 +1,29 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { NavBar } from "./components/NavBar";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import ActivateAccountPage from "./pages/ActivateAccountPage";
+import ActivateAccount from "./components/ActivateAccount";
+import ActivationErrorPage from "./pages/ActivationErrorPage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Home />
-      <NavBar />
-
+    <>
       <Routes>
-        <Route path="/" />
-        <Route path="/register" />
-        <Route path="/login" />
-        <Route path="/logout" />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/activate" element={<ActivateAccountPage />} />
+        <Route
+          path="/auth/activate/:uidb64/:token"
+          element={<ActivateAccount />}
+        />
+        <Route path="/activate-error" element={<ActivationErrorPage />}></Route>
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 

@@ -8,8 +8,11 @@
 
 /* Layer base styles */
 @layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
   body {
-    @apply font-base bg-black/90 text-white/80 min-h-dvh w-screen m-0 p-0 box-border;
+    @apply font-base text-lime-50 bg-slate-900 min-h-dvh w-screen;
   }
 }
 

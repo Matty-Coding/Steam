@@ -3,3 +3,6 @@ from .models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 
 # RIFARE TUTTO
+
+
+admin.site.register(CustomUser)
